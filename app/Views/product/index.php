@@ -1,20 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Daftar Produk</title>
-    Haha, siap! Biar tampilan web kamu gak polosan banget kaya web tahun '90-an pas dinilai dosen, kita poles dikit pakai CSS biar kelihatan rapi, modern, dan enak dilihat (clean minimalis).
-
-Sesuai instruksi dosen, kita gak perlu bikin frontend yang rumit dari nol. Jadi, kita pakai teknik Internal CSS aja biar kamu gak perlu bikin file baru, tinggal copy-paste ke dalam file View yang sudah ada.
-
-Yuk, buka lagi folder app/Views/product/ dan perbarui kode di dua file kemarin:
-
-📄 1. Update View Tampil Data: app/Views/product/index.php
-Ganti seluruh isi file index.php kamu dengan kode yang sudah diberi sentuhan CSS modern ini:
-
-HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Produk - CRUD CI4</title>
@@ -89,35 +75,50 @@ HTML
         .btn-delete:hover { color: #c0392b; text-decoration: underline; }
     </style>
 </head>
-
 <body>
-    <h2>Daftar Produk (CRUD CI4)</h2>
-    <a href="/product/create">➕ Tambah Produk Baru</a>
-    <br><br>
+
+<div class="container">
+    <h2>📋 Daftar Produk (CRUD CI4 - MySQL/MariaDB)</h2>
+    <a href="/product/create" class="btn-add">➕ Tambah Produk Baru</a>
 
     <?php if (session()->getFlashdata('success')) : ?>
-        <p style="color: green;"><b><?= session()->getFlashdata('success'); ?></b></p>
+        <div class="alert-success">
+            <?= session()->getFlashdata('success'); ?>
+        </div>
     <?php endif; ?>
 
-    <table border="1" cellpadding="10" cellspacing="0">
-        <tr>
-            <th>No</th>
-            <th>Gambar</th>
-            <th>Judul</th>
-            <th>Deskripsi</th>
-            <th>Aksi</th>
-        </tr>
-        <?php $i = 1; foreach ($products as $p) : ?>
-        <tr>
-            <td><?= $i++; ?></td>
-            <td><img src="/assets/img/upload/<?= $p['image']; ?>" width="100"></td>
-            <td><?= $p['title']; ?></td>
-            <td><?= $p['description']; ?></td>
-            <td>
-                <a href="/product/delete/<?= $p['id']; ?>" onclick="return confirm('Yakin hapus?')">Hapus</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 5%;">No</th>
+                <th style="width: 20%;">Gambar</th>
+                <th style="width: 25%;">Judul</th>
+                <th style="width: 40%;">Deskripsi</th>
+                <th style="width: 10%;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $i = 1; foreach ($products as $p) : ?>
+            <tr>
+                <td><?= $i++; ?></td>
+                <td>
+                    <img src="/assets/img/upload/<?= $p['image']; ?>" class="product-img" width="100" height="100">
+                </td>
+                <td><strong><?= $p['title']; ?></strong></td>
+                <td><?= $p['description']; ?></td>
+                <td>
+                    <a href="/product/delete/<?= $p['id']; ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php if (empty($products)) : ?>
+            <tr>
+                <td colspan="5" style="text-align: center; color: #7f8c8d;">Belum ada data produk.</td>
+            </tr>
+            <?php endif; ?>
+        </tbody>
     </table>
+</div>
+
 </body>
 </html>
